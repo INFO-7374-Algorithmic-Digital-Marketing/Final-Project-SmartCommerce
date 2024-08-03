@@ -46,12 +46,42 @@ Businesses face critical challenges in engaging with customers and optimizing op
 ```
 .
 ├── README.md
+├── data_pipeline
+│   ├── 01_database.py
+│   └── data_files
+│       ├── olist_customers_dataset.csv
+│       ├── olist_geolocation_dataset.csv
+│       ├── olist_order_items_dataset.csv
+│       ├── olist_order_payments_dataset.csv
+│       ├── olist_order_reviews_dataset.csv
+│       ├── olist_orders_dataset.csv
+│       ├── olist_products_dataset.csv
+│       ├── olist_sellers_dataset.csv
+│       └── product_category_name_translation.csv
+├── project_proposal
+└── requirements.txt
 ```
 
 *You can generate the project tree using following tools*
 *[Project Tree Generator](https://woochanleee.github.io/project-tree-generator)*
 *[Generate from terminal](https://www.geeksforgeeks.org/tree-command-unixlinux/)*
 
+## Empty .env file
+```
+OPENAI_API_KEY=""
+GROQ_API_KEY=""
+MY_SNOWFLAKE_ACCOUNT=""
+MY_SNOWFLAKE_USER=""
+MY_SNOWFLAKE_PASSWORD=""
+SNOWFLAKE_ROLE=""
+SNOWFLAKE_DATABASE=""
+SNOWFLAKE_SCHEMA=""
+SNOWFLAKE_WAREHOUSE=""
+```
+
+## Data Pipeline
+
+1. Run the 01_database.py script to create tables in Snowflake and load data from CSV files.
 
 ## How to run Application locally
 
@@ -64,8 +94,8 @@ Businesses face critical challenges in engaging with customers and optimizing op
 2. Set up virtual environment and install dependencies:
 
 ```bash
- python3 -m venv venv
-source venv/bin/activate
+conda create --name smartcommerce python=3.10
+conda activate smartcommerce
 pip install -r requirements.txt
 ```
 
