@@ -1,0 +1,8 @@
+pandas
+numpy
+faker
+uvicorn
+fastapi
+requests
+snowflake-sqlalchemy
+python-dotenv
