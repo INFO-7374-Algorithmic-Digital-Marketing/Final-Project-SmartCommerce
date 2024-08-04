@@ -17,7 +17,6 @@ load_dotenv()
 def get_snowflake_engine():
     logger.info("Attempting to create Snowflake engine.")
     try:
-
         engine = create_engine(URL(
             user=os.getenv("MY_SNOWFLAKE_USER"),
             password=os.getenv("MY_SNOWFLAKE_PASSWORD"),
@@ -138,16 +137,6 @@ def create_tables(engine, metadata):
         logger.error("Error creating tables in Snowflake: %s", e)
         sys.exit(1)
 
-# Insert data into tables
-def insert_data(df, table, engine):
-    logger.info("Inserting data into table '%s'.", table.name)
-    try:
-        df.to_sql(table.name, con=engine, index=False, if_exists='append')
-        logger.info("Data inserted into '%s' table successfully.", table.name)
-    except Exception as e:
-        logger.error("Error inserting data into '%s' table: %s", table.name, e)
-        sys.exit(1)
-
 # Load CSV files into DataFrames
 def load_data(file_path):
     logger.info("Loading data from %s", file_path)
@@ -157,6 +146,22 @@ def load_data(file_path):
         return df
     except Exception as e:
         logger.error("Error loading data from %s: %s", file_path, e)
+        sys.exit(1)
+
+# Insert data into tables in batches
+def insert_data_in_batches(df, table_name, engine, batch_size=200000):
+    logger.info(f"Inserting data into table '{table_name}' in batches.")
+    try:
+        connection = engine.connect()
+        for start in range(0, len(df), batch_size):
+            end = start + batch_size
+            batch_df = df.iloc[start:end]
+            batch_df.to_sql(table_name, con=connection, index=False, if_exists='append')
+            logger.info(f"Inserted batch from {start} to {end}.")
+        connection.close()
+        logger.info(f"Data inserted into '{table_name}' table successfully.")
+    except Exception as e:
+        logger.error(f"Error inserting data into '{table_name}' table: {e}")
         sys.exit(1)
 
 # Main function
@@ -185,7 +190,7 @@ def main():
     # Insert data into Snowflake tables
     for table_name, file_path in files.items():
         df = load_data(file_path)
-        insert_data(df, metadata.tables[table_name], engine)
+        insert_data_in_batches(df, table_name, engine)
 
 if __name__ == "__main__":
     main()
