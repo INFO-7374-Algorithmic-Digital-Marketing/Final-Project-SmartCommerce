@@ -9,3 +9,4 @@ python-dotenv
 colorama
 llama-index-core
 llama-index-llms-openai
+mlxtend
