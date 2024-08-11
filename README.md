@@ -44,22 +44,51 @@ Businesses face critical challenges in engaging with customers and optimizing op
 ## Project Structure
 
 ```
-.
-├── README.md
-├── data_pipeline
-│   ├── 01_database.py
-│   └── data_files
-│       ├── olist_customers_dataset.csv
-│       ├── olist_geolocation_dataset.csv
-│       ├── olist_order_items_dataset.csv
-│       ├── olist_order_payments_dataset.csv
-│       ├── olist_order_reviews_dataset.csv
-│       ├── olist_orders_dataset.csv
-│       ├── olist_products_dataset.csv
-│       ├── olist_sellers_dataset.csv
-│       └── product_category_name_translation.csv
-├── project_proposal
-└── requirements.txt
+/my_streamlit_app/
+│
+├── /app/
+│   ├── main.py                # Entry point for the Streamlit app
+│   ├── /pages/
+│   │   ├── recommendation.py  # Recommendation system page
+│   │   ├── chatbot.py         # Customer service chatbot page
+│   │   └── seller_dashboard.py# Seller dashboard page
+│   ├── /components/
+│   │   ├── header.py          # Common header component
+│   │   ├── footer.py          # Common footer component
+│   │   └── sidebar.py         # Sidebar for navigation
+│   ├── /utils/
+│   │   ├── auth.py            # User authentication and identification logic
+│   │   ├── api_calls.py       # Functions for calling FastAPI endpoints
+│   │   └── data_processing.py # Data processing functions for UI components
+│   └── /styles/
+│       └── app_styles.css     # Custom CSS for styling the Streamlit app
+│
+├── /api/
+│   ├── main.py                # Entry point for the FastAPI server
+│   ├── /routes/
+│   │   ├── recommendation.py  # API routes for recommendation system
+│   │   ├── chatbot.py         # API routes for customer service chatbot
+│   │   └── seller.py          # API routes for seller dashboard
+│   ├── /services/
+│   │   ├── recommendation_service.py # Business logic for recommendations
+│   │   ├── chatbot_service.py        # Business logic for chatbot
+│   │   └── seller_service.py         # Business logic for seller dashboard
+│   └── /models/
+│       ├── user.py            # Database models for user information
+│       └── product.py         # Database models for products/recommendations
+│
+├── /tests/
+│   ├── /unit/
+│   │   ├── test_auth.py        # Unit tests for authentication
+│   │   ├── test_recommendation.py # Unit tests for recommendation system
+│   │   └── test_chatbot.py     # Unit tests for chatbot
+│   └── /integration/
+│       ├── test_endpoints.py   # Integration tests for API endpoints
+│       └── test_user_flows.py  # Integration tests for user flows in the app
+│
+├── Dockerfile                  # Dockerfile for containerizing the application
+├── requirements.txt            # Python dependencies
+└── README.md                   # Project documentation
 ```
 
 *You can generate the project tree using following tools*
