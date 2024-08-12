@@ -132,3 +132,4 @@ cython_debug/
 
 # Ignore VSCode settings
 .vscode/
+data_pipeline/data_ebay/*
