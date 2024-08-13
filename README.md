@@ -6,7 +6,7 @@
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white)]()
 
-[![codelabs](https://img.shields.io/badge/codelabs-4285F4?style=for-the-badge&logo=codelabs&logoColor=white)]()
+[![codelabs](https://img.shields.io/badge/codelabs-4285F4?style=for-the-badge&logo=codelabs&logoColor=white)](https://codelabs-preview.appspot.com/?file_id=1N5TJkbmNsmNCn_fURhboz4v4yyjw-MnuAncG03n9IO8#0)
 
 ## Problem Statement
 Businesses face critical challenges in engaging with customers and optimizing operations. Key challenges include predicting customer preferences, managing churn, and providing effective support. Addressing these issues is crucial to maintaining customer satisfaction, reducing churn rates, and improving operational efficiency.
