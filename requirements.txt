@@ -6,3 +6,8 @@ fastapi
 requests
 snowflake-sqlalchemy
 python-dotenv
+colorama
+llama-index-core
+llama-index-llms-openai
+mlxtend
+plotly
