@@ -6,7 +6,7 @@
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white)]()
 
-[![codelabs](https://img.shields.io/badge/codelabs-4285F4?style=for-the-badge&logo=codelabs&logoColor=white)]()
+[![codelabs](https://img.shields.io/badge/codelabs-4285F4?style=for-the-badge&logo=codelabs&logoColor=white)](https://codelabs-preview.appspot.com/?file_id=1N5TJkbmNsmNCn_fURhboz4v4yyjw-MnuAncG03n9IO8#0)
 
 ## Problem Statement
 Businesses face critical challenges in engaging with customers and optimizing operations. Key challenges include predicting customer preferences, managing churn, and providing effective support. Addressing these issues is crucial to maintaining customer satisfaction, reducing churn rates, and improving operational efficiency.
@@ -45,10 +45,49 @@ Businesses face critical challenges in engaging with customers and optimizing op
 
 ```
 .
+├── Makefile
 ├── README.md
 ├── data_pipeline
-│   ├── 01_database.py
+│   ├── 01_eda.ipynb
+│   ├── 02_feature_engineering.py
+│   ├── 03_upload_to_snowflake.py
 │   └── data_files
+│       ├── processed
+│       │   ├── orders_full.csv
+│       │   ├── product_avg_price.csv
+│       │   ├── product_idf_descriptions.csv
+│       │   └── top_1000_product_review_summaries.csv
+│       └── raw
+│           ├── olist_customers_dataset.csv
+│           ├── olist_geolocation_dataset.csv
+│           ├── olist_order_items_dataset.csv
+│           ├── olist_order_payments_dataset.csv
+│           ├── olist_order_reviews_dataset.csv
+│           ├── olist_orders_dataset.csv
+│           ├── olist_products_dataset.csv
+│           ├── olist_sellers_dataset.csv
+│           └── product_category_name_translation.csv
+├── diagrams
+│   ├── Architecture.drawio
+│   ├── Architecture.drawio.png
+│   ├── iter_0.png
+│   └── iter_1.png
+├── fastapi
+│   ├── main.py
+│   └── recommendation_systems
+│       ├── collaborative_filter.py
+│       ├── content_filter.py
+│       ├── contextual_filter.py
+│       └── market_basket_analysis.py
+├── project_proposal
+│   ├── 01_EDA.ipynb
+│   ├── 02_Content_Based_Filtering_RecSys.ipynb
+│   ├── 03_Collaborative_Filtering_RecSys copy.ipynb
+│   ├── 04_Agentic_RecSys.ipynb
+│   ├── 05_Churn_Modelling.ipynb
+│   ├── 06_Agentic_User_Behaviour_Email.ipynb
+│   ├── 07_Agentic_Customer_Service_Bot.ipynb
+│   └── data
 │       ├── olist_customers_dataset.csv
 │       ├── olist_geolocation_dataset.csv
 │       ├── olist_order_items_dataset.csv
@@ -58,8 +97,12 @@ Businesses face critical challenges in engaging with customers and optimizing op
 │       ├── olist_products_dataset.csv
 │       ├── olist_sellers_dataset.csv
 │       └── product_category_name_translation.csv
-├── project_proposal
-└── requirements.txt
+├── requirements.txt
+├── streamlit
+│   └── main.py
+└── tests
+    ├── integration
+    └── unit
 ```
 
 *You can generate the project tree using following tools*
