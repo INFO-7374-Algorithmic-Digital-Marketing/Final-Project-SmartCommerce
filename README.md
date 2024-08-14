@@ -6,7 +6,7 @@
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-009688?style=for-the-badge&logo=FastAPI&logoColor=white)]()
 
-[![codelabs](https://img.shields.io/badge/codelabs-4285F4?style=for-the-badge&logo=codelabs&logoColor=white)]()
+[![codelabs](https://img.shields.io/badge/codelabs-4285F4?style=for-the-badge&logo=codelabs&logoColor=white)](https://codelabs-preview.appspot.com/?file_id=1N5TJkbmNsmNCn_fURhboz4v4yyjw-MnuAncG03n9IO8#0)
 
 ## Problem Statement
 Businesses face critical challenges in engaging with customers and optimizing operations. Key challenges include predicting customer preferences, managing churn, and providing effective support. Addressing these issues is crucial to maintaining customer satisfaction, reducing churn rates, and improving operational efficiency.
@@ -44,51 +44,65 @@ Businesses face critical challenges in engaging with customers and optimizing op
 ## Project Structure
 
 ```
-/my_streamlit_app/
-│
-├── /app/
-│   ├── main.py                # Entry point for the Streamlit app
-│   ├── /pages/
-│   │   ├── recommendation.py  # Recommendation system page
-│   │   ├── chatbot.py         # Customer service chatbot page
-│   │   └── seller_dashboard.py# Seller dashboard page
-│   ├── /components/
-│   │   ├── header.py          # Common header component
-│   │   ├── footer.py          # Common footer component
-│   │   └── sidebar.py         # Sidebar for navigation
-│   ├── /utils/
-│   │   ├── auth.py            # User authentication and identification logic
-│   │   ├── api_calls.py       # Functions for calling FastAPI endpoints
-│   │   └── data_processing.py # Data processing functions for UI components
-│   └── /styles/
-│       └── app_styles.css     # Custom CSS for styling the Streamlit app
-│
-├── /api/
-│   ├── main.py                # Entry point for the FastAPI server
-│   ├── /routes/
-│   │   ├── recommendation.py  # API routes for recommendation system
-│   │   ├── chatbot.py         # API routes for customer service chatbot
-│   │   └── seller.py          # API routes for seller dashboard
-│   ├── /services/
-│   │   ├── recommendation_service.py # Business logic for recommendations
-│   │   ├── chatbot_service.py        # Business logic for chatbot
-│   │   └── seller_service.py         # Business logic for seller dashboard
-│   └── /models/
-│       ├── user.py            # Database models for user information
-│       └── product.py         # Database models for products/recommendations
-│
-├── /tests/
-│   ├── /unit/
-│   │   ├── test_auth.py        # Unit tests for authentication
-│   │   ├── test_recommendation.py # Unit tests for recommendation system
-│   │   └── test_chatbot.py     # Unit tests for chatbot
-│   └── /integration/
-│       ├── test_endpoints.py   # Integration tests for API endpoints
-│       └── test_user_flows.py  # Integration tests for user flows in the app
-│
-├── Dockerfile                  # Dockerfile for containerizing the application
-├── requirements.txt            # Python dependencies
-└── README.md                   # Project documentation
+.
+├── Makefile
+├── README.md
+├── data_pipeline
+│   ├── 01_eda.ipynb
+│   ├── 02_feature_engineering.py
+│   ├── 03_upload_to_snowflake.py
+│   └── data_files
+│       ├── processed
+│       │   ├── orders_full.csv
+│       │   ├── product_avg_price.csv
+│       │   ├── product_idf_descriptions.csv
+│       │   └── top_1000_product_review_summaries.csv
+│       └── raw
+│           ├── olist_customers_dataset.csv
+│           ├── olist_geolocation_dataset.csv
+│           ├── olist_order_items_dataset.csv
+│           ├── olist_order_payments_dataset.csv
+│           ├── olist_order_reviews_dataset.csv
+│           ├── olist_orders_dataset.csv
+│           ├── olist_products_dataset.csv
+│           ├── olist_sellers_dataset.csv
+│           └── product_category_name_translation.csv
+├── diagrams
+│   ├── Architecture.drawio
+│   ├── Architecture.drawio.png
+│   ├── iter_0.png
+│   └── iter_1.png
+├── fastapi
+│   ├── main.py
+│   └── recommendation_systems
+│       ├── collaborative_filter.py
+│       ├── content_filter.py
+│       ├── contextual_filter.py
+│       └── market_basket_analysis.py
+├── project_proposal
+│   ├── 01_EDA.ipynb
+│   ├── 02_Content_Based_Filtering_RecSys.ipynb
+│   ├── 03_Collaborative_Filtering_RecSys copy.ipynb
+│   ├── 04_Agentic_RecSys.ipynb
+│   ├── 05_Churn_Modelling.ipynb
+│   ├── 06_Agentic_User_Behaviour_Email.ipynb
+│   ├── 07_Agentic_Customer_Service_Bot.ipynb
+│   └── data
+│       ├── olist_customers_dataset.csv
+│       ├── olist_geolocation_dataset.csv
+│       ├── olist_order_items_dataset.csv
+│       ├── olist_order_payments_dataset.csv
+│       ├── olist_order_reviews_dataset.csv
+│       ├── olist_orders_dataset.csv
+│       ├── olist_products_dataset.csv
+│       ├── olist_sellers_dataset.csv
+│       └── product_category_name_translation.csv
+├── requirements.txt
+├── streamlit
+│   └── main.py
+└── tests
+    ├── integration
+    └── unit
 ```
 
 *You can generate the project tree using following tools*
