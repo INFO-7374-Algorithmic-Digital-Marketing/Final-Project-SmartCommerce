@@ -10,3 +10,4 @@ colorama
 llama-index-core
 llama-index-llms-openai
 mlxtend
+plotly

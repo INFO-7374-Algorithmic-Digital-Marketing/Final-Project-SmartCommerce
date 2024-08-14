@@ -53,4 +53,5 @@ async def get_market_basket_recommendations(user_input: UserInput):
     recommendations = agent.recommend(user_order_history)
     return recommendations
 
-# 548a09978548d2e347d494793e34c797
+# 548a09978548d2e347d494793e34c797 - Customer
+# 7d13fca15225358621be4086e1eb0964 - Seller
