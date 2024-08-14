@@ -5,11 +5,16 @@ from recommendation_systems.content_filter import OrderHistoryAgent
 from recommendation_systems.contextual_filter import ContextAwareAgent
 from recommendation_systems.market_basket_analysis import MarketBasketAgent
 import pandas as pd
-
+import os
 app = FastAPI()
 
-RAW_DATA_FOLDER_PATH = '/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/data_pipeline/data_files/raw/'
-PROCESSED_DATA_FOLDER_PATH = '/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/data_pipeline/data_files/processed/'
+# Get the current working directory
+current_dir = os.getcwd()
+
+# Construct the paths relative to the Final-Project-SmartCommerce directory
+
+RAW_DATA_FOLDER_PATH = "/home/snehilaryan/final_pro/Final-Project-SmartCommerce/data_pipeline/data_files/raw/"
+PROCESSED_DATA_FOLDER_PATH = "/home/snehilaryan/final_pro/Final-Project-SmartCommerce/data_pipeline/data_files/processed/"
 
 # Load the preprocessed data
 orders_full = pd.read_csv(PROCESSED_DATA_FOLDER_PATH + 'orders_full.csv')
