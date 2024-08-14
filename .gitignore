@@ -10,6 +10,7 @@ __pycache__/
 .DS_Store
 
 # Distribution / packaging
+venv/
 .Python
 build/
 develop-eggs/
@@ -134,3 +135,4 @@ cython_debug/
 
 # Ignore VSCode settings
 .vscode/
+data_pipeline/data_ebay/*
