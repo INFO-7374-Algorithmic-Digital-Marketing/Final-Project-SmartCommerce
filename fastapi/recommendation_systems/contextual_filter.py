@@ -120,9 +120,21 @@ class ContextAwareAgent:
                 "description": product_info['shortDescription'],
                 "image_url": product_info['imageUrl'],  # Replace with actual column name for image URL
                 "link": product_info['itemWebUrl'],
-                "avg_price": product_info["target_price"]            # Replace with actual column name for product link
+                "avg_price": product_info["target_price"],            # Replace with actual column name for product link
+                "summary": product_info['summary']
             }
             popular_items_details.append(product_details)
 
         logging.info(f"Popular items in location {location}: {popular_items_details}")
         return popular_items_details
+
+# Columns Needed 
+# customer_unique_id: Used to determine the user's location based on their unique ID.
+# customer_city: Used to fetch the user's location and to find popular items in that location.
+# product_id: Used to list the products related to specific trends, events, and social media mentions, as well as to find popular items by location.
+# title: Used as the name of the product in the popular items by location.
+# shortDescription: Used as the description of the product in the popular items by location.
+# imageUrl: Used to provide the image URL of popular items by location.
+# itemWebUrl: Used to provide the web link to the popular items by location.
+# target_price: Used to include the average price of the popular items by location.
+# summary: Included in the product details for the popular items by location.

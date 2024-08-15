@@ -37,9 +37,22 @@ class OrderHistoryAgent:
                 "description": product_info['shortDescription'],
                 "image_url": product_info['imageUrl'],  # Replace with actual column name for image URL
                 "link": product_info['itemWebUrl'],           # Replace with actual column name for product link
-                "avg_price": product_info['target_price']
+                "avg_price": product_info['target_price'],
+                "summary": product_info['summary']
             }
             similar_items_details.append(product_details)
 
         logging.info(f"Top similar items based on categories in order history: {similar_items_details}")
         return similar_items_details
+
+# Columns Needed
+# customer_unique_id: Used to filter the order history for a specific user.
+# product_id: Used to list the products in the user's order history, filter similar items, and identify products for detailed information.
+# product_category_name_english: Used to find the categories of products in the user's order history and filter similar items.
+# avg_sentiment_score: Used to calculate the average sentiment score for similar items and to sort and select the top products.
+# title: Used as the name of the product in the detailed information for similar items.
+# shortDescription: Used as the description of the product in the detailed information for similar items.
+# imageUrl: Used to provide the image URL of the similar items.
+# itemWebUrl: Used to provide the web link to the similar items.
+# target_price: Used to include the average price of the similar items in the detailed information.
+# summary: Included in the product details for the similar items.

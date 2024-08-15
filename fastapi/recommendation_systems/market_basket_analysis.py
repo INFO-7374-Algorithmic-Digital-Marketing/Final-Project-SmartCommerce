@@ -90,3 +90,7 @@ class MarketBasketAgent:
 
 
 
+# Columns needed
+# order_id: Used to group the products into baskets (transactions) for the Apriori algorithm.
+# product_id: Used to filter products that meet the frequency threshold, group products in the basket, and generate association rules.
+# quantity: Created within the code to represent the presence of a product in an order (set to 1 for all products) and used for grouping in the basket.

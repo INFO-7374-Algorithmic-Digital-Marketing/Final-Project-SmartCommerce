@@ -32,11 +32,13 @@ with col2:
         st.rerun()  # Refresh the page to apply changes
 
 # Add a custom title with a different style
-st.markdown("<h1 style='text-align: center; color: #4CAF50;'>Welcome to Your Personalized Shopping Experience!</h1>", unsafe_allow_html=True)
+st.markdown("<h1 style='text-align: center; color: #007a99;'>Welcome to Your Personalized Shopping Experience!</h1>", unsafe_allow_html=True)
 
-# Always visible search bar at the top
+# Wrap the search bar and button in a single column with full width
 search_query = st.text_input("Search for products", placeholder="Type here...", help="Search for your favorite items.")
-search_button_clicked = st.button("Search")
+search_button_col = st.columns([1])  # Single column to ensure full width
+with search_button_col[0]:
+    search_button_clicked = st.button("Search", use_container_width=True)
 
 if search_button_clicked and search_query:
     st.subheader("Top 10 Items for Your Search")
@@ -51,7 +53,7 @@ with st.spinner("Generating recommendations..."):
 
 # Add styled subheaders
 st.markdown("### 🌟 Handpicked Recommendations for You!")
-st.markdown("<hr style='border:1px solid #4CAF50;'>", unsafe_allow_html=True)
+st.markdown("<hr style='border:1px solid #007a99;'>", unsafe_allow_html=True)
 
 def display_product_strip(products, section_title):
     st.markdown(f"#### {section_title}")
@@ -87,7 +89,7 @@ st.markdown(
     }
     /* Style the buttons */
     div.stButton > button {
-        background-color: #4CAF50;
+        background-color: #007a99;
         color: white;
         border: none;
         padding: 10px 20px;
@@ -99,11 +101,11 @@ st.markdown(
         transition: all 0.3s ease-in-out;
     }
     div.stButton > button:hover {
-        background-color: #45a049;
+        background-color: #007a99;
     }
     /* Add hover effect to the text */
     .stMarkdown p:hover {
-        color: #4CAF50;
+        color: #007a99;
     }
     </style>
     """,
