@@ -41,9 +41,9 @@ with search_button_col[0]:
     search_button_clicked = st.button("Search", use_container_width=True)
 
 if search_button_clicked and search_query:
-    st.subheader("Top 10 Items for Your Search")
-    for i in range(1, 11):
-        st.write(f"{i}. Sample Item {i}")  # Replace with actual search logic
+    # Store the search query in session state and redirect to search results page
+    st.session_state.search_query = search_query
+    st.switch_page("pages/4_Search_Results.py")
 
 with st.spinner("Generating recommendations..."):
     # Fetch recommendations

@@ -34,10 +34,16 @@ def get_search_results(query: str, orders_full: pd.DataFrame, threshold: int = 7
         logging.warning("No results found for the query: '%s'", query)
     else:
         logging.info("Sorting results by match score")
-    
-    # Sort by match score and select the top 10 results
-    top_results = results.sort_values(by='match_score', ascending=False).head(10)
-    logging.info("Top 10 results selected")
+
+    # Sort by match score
+    sorted_results = results.sort_values(by='match_score', ascending=False)
+
+    # Remove duplicates based on 'product_id'
+    unique_results = sorted_results.drop_duplicates(subset='product_id')
+
+    # Select the top 10 unique results
+    top_results = unique_results.head(10)
+    logging.info("Top 10 unique results selected")
 
     # Convert the results to the desired format
     search_results = []

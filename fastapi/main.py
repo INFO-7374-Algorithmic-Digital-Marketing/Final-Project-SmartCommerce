@@ -36,13 +36,13 @@ class SearchRequest(BaseModel):
     query: str
     user_id: str
 
+
 @app.post("/product_search")
 async def product_search(request: SearchRequest):
     logging.info(f"Searching for products using embeddings for user_id: {request.user_id}")
     results = get_search_results(request.query, orders_full)
-    if results is None:
+    if not results:
         raise HTTPException(status_code=404, detail="No products found")
-    # Convert results to a dictionary for JSON response
     return results
 
 @app.post("/authenticate")

@@ -37,8 +37,6 @@ class CollaborativeFilteringAgent:
         
         recommended_items = []
         for _, item in top_items.iterrows():
-            print("\n\nKEYS:")
-            print(item.keys())
             product_details = {
                 "product_id": item['product_id'],
                 "name": item['title'],
