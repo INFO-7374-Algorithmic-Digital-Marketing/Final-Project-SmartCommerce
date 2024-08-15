@@ -33,11 +33,11 @@ class OrderHistoryAgent:
             product_info = self.data[self.data['product_id'] == product_id].iloc[0]
             product_details = {
                 "product_id": product_info['product_id'],
-                "name": product_info['product_name'],
-                "description": product_info['product_description'],
-                "image_url": product_info['image_url'],  # Replace with actual column name for image URL
-                "link": product_info['link'],           # Replace with actual column name for product link
-                "avg_price": product_info['price']
+                "name": product_info['title'],
+                "description": product_info['shortDescription'],
+                "image_url": product_info['imageUrl'],  # Replace with actual column name for image URL
+                "link": product_info['itemWebUrl'],           # Replace with actual column name for product link
+                "avg_price": product_info['target_price']
             }
             similar_items_details.append(product_details)
 

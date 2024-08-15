@@ -3,9 +3,14 @@ import logging
 from textblob import TextBlob
 import pandas as pd
 from collections import Counter
+from dotenv import load_dotenv
+import os
 
-RAW_DATA_FOLDER_PATH = '/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/data_pipeline/data_files/raw/'
-PROCESSED_DATA_FOLDER_PATH = '/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/data_pipeline/data_files/processed/'
+# Load environment variables from a .env file
+load_dotenv()
+
+RAW_DATA_FOLDER_PATH = os.getenv("RAW_DATA_FOLDER_PATH")
+PROCESSED_DATA_FOLDER_PATH = os.getenv("PROCESSED_DATA_FOLDER_PATH")
 
 # Function to perform sentiment analysis on reviews
 def analyze_sentiment(review):
@@ -87,19 +92,20 @@ def create_orders_full():
     orders = pd.read_csv(RAW_DATA_FOLDER_PATH + 'olist_orders_dataset.csv')
     products = pd.read_csv(RAW_DATA_FOLDER_PATH + 'olist_products_dataset.csv')
     sellers = pd.read_csv(RAW_DATA_FOLDER_PATH + 'olist_sellers_dataset.csv')
-    product_category_name_translation = pd.read_csv(RAW_DATA_FOLDER_PATH + 'product_category_name_translation.csv')
-    product_desc = pd.read_csv(PROCESSED_DATA_FOLDER_PATH + 'product_idf_descriptions.csv')
+    product_desc = pd.read_csv(PROCESSED_DATA_FOLDER_PATH + 'product_details.csv')
     review_summary = pd.read_csv(PROCESSED_DATA_FOLDER_PATH + 'top_1000_product_review_summaries.csv')
-    
-    logging.info("Merging datasets to create a single cohesive dataset...")
-    # Merge datasets to create a single cohesive dataset
-    orders_full = orders.merge(customers, on='customer_id', how='left')
-    orders_full = orders_full.merge(order_items, on='order_id', how='left')
+    product_desc['shortDescription'].fillna("No Description Provided", inplace=True)
+
+    top_1000_product_ids = product_desc['product_id'].unique()
+    order_items_filtered = order_items[order_items['product_id'].isin(top_1000_product_ids)]
+
+    # Step 2: Merge datasets
+    orders_full = order_items_filtered.merge(orders, on='order_id', how='left')
+    orders_full = orders_full.merge(customers, on='customer_id', how='left')
     orders_full = orders_full.merge(products, on='product_id', how='left')
     orders_full = orders_full.merge(sellers, on='seller_id', how='left')
     orders_full = orders_full.merge(order_reviews, on='order_id', how='left')
     orders_full = orders_full.merge(order_payments, on='order_id', how='left')
-    orders_full = orders_full.merge(product_category_name_translation, on='product_category_name', how='left')
     orders_full = orders_full.merge(product_desc, on='product_id', how='left')
     orders_full = orders_full.merge(review_summary, on='product_id', how='left')
     
@@ -132,8 +138,6 @@ def create_orders_full():
     # Add a quantity column
     logging.info("Adding quantity column...")
     filtered_orders['quantity'] = 1
-    filtered_orders['image_url'] = "https://picsum.photos/200/300"
-    filtered_orders['link'] = "www.example.com"
     
     logging.info("Data preprocessing complete.")
     return filtered_orders

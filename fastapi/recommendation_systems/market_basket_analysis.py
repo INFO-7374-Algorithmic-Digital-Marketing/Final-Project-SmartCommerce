@@ -6,7 +6,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 def apriori_recommendation_system(min_support=0.0001):
     # Load data
-    # import pdb; pdb.set_trace()
     logging.info("Loading order items dataset...")
     data = pd.read_csv(file_paths["order_items"])
     data = data.head(40000)

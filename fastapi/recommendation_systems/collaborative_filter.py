@@ -25,11 +25,11 @@ class CollaborativeFilteringAgent:
         items_bought_by_similar_users = items_bought_by_similar_users.groupby('product_id').agg({
             'avg_sentiment_score': 'mean',
             'product_category_name_english': 'first',
-            'price': 'mean',
-            'product_name': 'first',
-            'product_description': 'first',
-            'image_url': 'first',
-            'link': 'first'
+            'target_price': 'mean',
+            'title': 'first',
+            'shortDescription': 'first',
+            'imageUrl': 'first',
+            'itemWebUrl': 'first'
         }).reset_index()
         
         top_items = items_bought_by_similar_users.sort_values(by='avg_sentiment_score', ascending=False).head(10)
@@ -38,13 +38,13 @@ class CollaborativeFilteringAgent:
         for _, item in top_items.iterrows():
             product_details = {
                 "product_id": item['product_id'],
-                "name": item['product_name'],
-                "description": item['product_description'],
-                "image_url": item['image_url'],
-                "link": item['link'],
+                "name": item['title'],
+                "description": item['shortDescription'],
+                "image_url": item['imageUrl'],
+                "link": item['itemWebUrl'],
                 "category": item['product_category_name_english'],
                 "avg_sentiment_score": item['avg_sentiment_score'],
-                "avg_price": item['price']
+                "avg_price": item['target_price']
             }
             recommended_items.append(product_details)
         

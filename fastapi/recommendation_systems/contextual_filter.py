@@ -113,14 +113,14 @@ class ContextAwareAgent:
         # Loop through each product ID and fetch the corresponding details
         for product_id in popular_item_ids:
             product_info = self.data[self.data['product_id'] == product_id].iloc[0]  # Assuming product_id is unique
-            
+            print(product_info.keys())
             product_details = {
                 "product_id": product_info['product_id'],
-                "name": product_info['product_name'],
-                "description": product_info['product_description'],
-                "image_url": product_info['image_url'],  # Replace with actual column name for image URL
-                "link": product_info['link'],
-                "avg_price": product_info["price"]            # Replace with actual column name for product link
+                "name": product_info['title'],
+                "description": product_info['shortDescription'],
+                "image_url": product_info['imageUrl'],  # Replace with actual column name for image URL
+                "link": product_info['itemWebUrl'],
+                "avg_price": product_info["target_price"]            # Replace with actual column name for product link
             }
             popular_items_details.append(product_details)
 
