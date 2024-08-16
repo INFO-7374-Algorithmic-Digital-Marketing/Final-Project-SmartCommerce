@@ -103,9 +103,9 @@ class ContextAwareAgent:
         logging.info(f"Generated insights and recommendations for user_id {user_id}: {insights}")
         return insights
 
-    def get_popular_items_by_location(self, location):
+    def get_popular_items_by_location(self, location, num_of_items=6):
         # Get the top 10 product IDs based on popularity in the given location
-        popular_item_ids = self.data[self.data['customer_city'] == location]['product_id'].value_counts().head(10).index.tolist()
+        popular_item_ids = self.data[self.data['customer_city'] == location]['product_id'].value_counts().head(num_of_items).index.tolist()
 
         # Initialize an empty list to store detailed product information
         popular_items_details = []
@@ -113,16 +113,28 @@ class ContextAwareAgent:
         # Loop through each product ID and fetch the corresponding details
         for product_id in popular_item_ids:
             product_info = self.data[self.data['product_id'] == product_id].iloc[0]  # Assuming product_id is unique
-            
+            print(product_info.keys())
             product_details = {
                 "product_id": product_info['product_id'],
-                "name": product_info['product_name'],
-                "description": product_info['product_description'],
-                "image_url": product_info['image_url'],  # Replace with actual column name for image URL
-                "link": product_info['link'],
-                "avg_price": product_info["price"]            # Replace with actual column name for product link
+                "name": product_info['title'],
+                "description": product_info['shortDescription'],
+                "image_url": product_info['imageUrl'],  # Replace with actual column name for image URL
+                "link": product_info['itemWebUrl'],
+                "avg_price": product_info["target_price"],            # Replace with actual column name for product link
+                "summary": product_info['summary']
             }
             popular_items_details.append(product_details)
 
         logging.info(f"Popular items in location {location}: {popular_items_details}")
         return popular_items_details
+
+# Columns Needed 
+# customer_unique_id: Used to determine the user's location based on their unique ID.
+# customer_city: Used to fetch the user's location and to find popular items in that location.
+# product_id: Used to list the products related to specific trends, events, and social media mentions, as well as to find popular items by location.
+# title: Used as the name of the product in the popular items by location.
+# shortDescription: Used as the description of the product in the popular items by location.
+# imageUrl: Used to provide the image URL of popular items by location.
+# itemWebUrl: Used to provide the web link to the popular items by location.
+# target_price: Used to include the average price of the popular items by location.
+# summary: Included in the product details for the popular items by location.
