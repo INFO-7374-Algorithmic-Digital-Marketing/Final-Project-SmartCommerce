@@ -23,8 +23,13 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 app = FastAPI()
 
-RAW_DATA_FOLDER_PATH = '/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/data_pipeline/data_files/raw/'
-PROCESSED_DATA_FOLDER_PATH = '/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/data_pipeline/data_files/processed/'
+# Get the current working directory
+current_dir = os.getcwd()
+
+# Construct the paths relative to the Final-Project-SmartCommerce directory
+
+RAW_DATA_FOLDER_PATH = "/home/snehilaryan/final_pro/Final-Project-SmartCommerce/data_pipeline/data_files/raw/"
+PROCESSED_DATA_FOLDER_PATH = "/home/snehilaryan/final_pro/Final-Project-SmartCommerce/data_pipeline/data_files/processed/"
 
 # Load the preprocessed data
 logging.info("Loading preprocessed data from CSV files")
