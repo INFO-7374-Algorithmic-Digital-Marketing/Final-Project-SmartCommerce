@@ -1,6 +1,7 @@
 from fuzzywuzzy import fuzz
 import pandas as pd
 import logging
+import numpy as np
 
 def get_search_results(query: str, orders_full: pd.DataFrame, threshold: int = 70) -> list:
     logging.info("Starting search with query: '%s'", query)
@@ -20,6 +21,10 @@ def get_search_results(query: str, orders_full: pd.DataFrame, threshold: int = 7
                       category_score, title_score, description_score, max_score)
         
         return max_score
+    orders_full = orders_full[["product_id", "title", "shortDescription", "imageUrl", "itemWebUrl", "product_category_name_english", "avg_sentiment_score", "target_price", "summary"]]
+    orders_full = orders_full.drop_duplicates()
+    # Handle NaN in the summary column
+    orders_full['summary'] = orders_full['summary'].fillna("No review summary available")
 
     logging.info("Applying fuzzy matching to the DataFrame")
     # Apply the fuzzy match function and filter based on a threshold
@@ -39,18 +44,19 @@ def get_search_results(query: str, orders_full: pd.DataFrame, threshold: int = 7
     sorted_results = results.sort_values(by='match_score', ascending=False)
 
     # Remove duplicates based on 'product_id'
-    unique_results = sorted_results.drop_duplicates(subset='product_id')
+    unique_results = sorted_results.drop_duplicates(subset='title')
 
     # Select the top 10 unique results
-    top_results = unique_results.head(10)
+    top_results = unique_results.head(10).reset_index()
     logging.info("Top 10 unique results selected")
 
     # Convert the results to the desired format
     search_results = []
     logging.info("Converting top results to the desired format")
+    print(top_results[["title"]])
     
-    for index, item in top_results.iterrows():
-        logging.debug("Processing product_id: %s with match_score: %d", item['product_id'], item['match_score'])
+    for i in range(10):
+        item = top_results.iloc[i]
         search_results.append({
             "product_id": item['product_id'],
             "name": item['title'],
@@ -58,11 +64,11 @@ def get_search_results(query: str, orders_full: pd.DataFrame, threshold: int = 7
             "image_url": item['imageUrl'],
             "link": item['itemWebUrl'],
             "category": item['product_category_name_english'],
-            "avg_sentiment_score": item['avg_sentiment_score'],
             "avg_price": item['target_price'],
             "summary": item['summary']
         })
-    
+    print(search_results)
+
     logging.info("Search completed, returning results")
     logging.info("Titles of top results: %s", [result['name'] for result in search_results])
     return search_results

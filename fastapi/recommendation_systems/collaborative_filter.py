@@ -10,6 +10,7 @@ class CollaborativeFilteringAgent:
         self.user_personas = self._create_user_persona_dict()
 
     def _create_user_persona_dict(self):
+        print("Creating persona")
         return self.data.groupby('customer_unique_id')['persona_column'].first().to_dict()
 
     def get_items_bought_by_similar_users(self, user_id, num_of_items=6):

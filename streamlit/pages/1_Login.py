@@ -1,6 +1,10 @@
 import streamlit as st
 import requests
 from PIL import Image
+from dotenv import load_dotenv
+
+st.set_page_config(layout="wide") 
+load_dotenv()
 
 API_URL = "http://localhost:8000"  # Update this with your FastAPI server URL
 
@@ -10,7 +14,7 @@ id_mapping = {
 }
 
 # Add your logo
-logo = Image.open("/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/streamlit/pages/assets/logo.jpeg")
+logo = Image.open("pages/assets/logo.jpeg")
 
 # Create a sidebar
 st.sidebar.image(logo, width=200)

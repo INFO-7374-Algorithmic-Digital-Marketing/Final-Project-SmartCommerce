@@ -125,7 +125,22 @@ def search_ebay_items_by_category_and_price(category_name, target_price, access_
     items = search_ebay_items(params, access_token)
     if items:
         try:
-            closest_item = min(items, key=lambda x: abs(float(x.get('price', {}).get('value', 0)) - target_price))
+            # Filter out duplicates by title
+            unique_titles = set()
+            unique_items = []
+            
+            for item in items:
+                title = item.get('title', '')
+                if title not in unique_titles:
+                    unique_titles.add(title)
+                    unique_items.append(item)
+            
+            if not unique_items:
+                print(f"No unique items found in category '{category_name}'.")
+                return None
+            
+            # Find the closest item by price among unique items
+            closest_item = min(unique_items, key=lambda x: abs(float(x.get('price', {}).get('value', 0)) - target_price))
             details = get_item_details(closest_item['itemId'], access_token)
             return {
                 'title': details.get('title', ''),
@@ -234,7 +249,7 @@ if access_token:
         else:
             failed_categories.append(row['product_category_name_english'])
 
-df.to_csv(PROCESSED_DATA_FOLDER_PATH + 'generated_product_details.csv', index=False)
+df.to_csv(PROCESSED_DATA_FOLDER_PATH + 'generated_product_details_new.csv', index=False)
 
 # Print the list of categories that didn't work out
 print("\nCategories that failed to retrieve items:")
