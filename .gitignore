@@ -9,6 +9,8 @@ __pycache__/
 *.csv
 .DS_Store
 
+*user_logs*
+
 # Distribution / packaging
 venv/
 .Python

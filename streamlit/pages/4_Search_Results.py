@@ -2,6 +2,11 @@ import streamlit as st
 import requests
 from PIL import Image
 from io import BytesIO
+import datetime
+import datetime
+from streamlit import cache_data
+import json
+
 
 # Set the API URL
 API_URL = "http://localhost:8000"
@@ -14,6 +19,40 @@ def fetch_image(url):
 
 def resize_image(image, new_size):
     return image.resize(new_size)
+
+# Function to log actions
+def log_action(action_type, product=None, search_query=None):
+    today_date = datetime.datetime.now().date().isoformat()  # Get today's date
+    log_entry = {
+        "user_id": st.session_state.user_id,
+        "action": action_type,
+        "timestamp": datetime.datetime.now().isoformat(),
+        "date": today_date  # Add today's date
+    }
+    if product:
+        log_entry["product_name"] = product
+    if search_query:
+        log_entry["search_query"] = search_query
+    st.session_state.user_log.append(log_entry)
+
+# Add a Logs button to the sidebar
+with st.sidebar:
+    show_logs = st.checkbox("Show User Journey")
+
+    if show_logs:
+        st.write("### User Journey")
+        if st.session_state.user_log:
+            for log in st.session_state.user_log:
+                st.write(f"**Date:** {log['date']}")
+                st.write(f"**Action:** {log['action']}")
+                st.write(f"**Timestamp:** {log['timestamp']}")
+                if "product_name" in log:
+                    st.write(f"**Product Name:** {log['product_name']}")
+                if "search_query" in log:
+                    st.write(f"**Search Query:** {log['search_query']}")
+                st.write("---")
+        else:
+            st.write("No actions logged yet.")
 
 # Check if we have a search query
 if 'search_query' not in st.session_state:
@@ -43,6 +82,7 @@ else:
                 st.write(f"**Price:** ${product['avg_price']:.2f}")
                 st.write(f"**Description:** {product['description'][:100]}...")
                 if st.button("View Details", key=product['product_id']):
+                    log_action("view_details", product=product['name'])
                     st.session_state.selected_product = product
                     st.switch_page("pages/3_Product_Details.py")
         

@@ -1,5 +1,24 @@
 import streamlit as st
 
+# Add a Logs button to the sidebar
+with st.sidebar:
+    show_logs = st.checkbox("Show User Journey")
+
+    if show_logs:
+        st.write("### User Journey")
+        if st.session_state.user_log:
+            for log in st.session_state.user_log:
+                st.write(f"**Date:** {log['date']}")
+                st.write(f"**Action:** {log['action']}")
+                st.write(f"**Timestamp:** {log['timestamp']}")
+                if "product_name" in log:
+                    st.write(f"**Product Name:** {log['product_name']}")
+                if "search_query" in log:
+                    st.write(f"**Search Query:** {log['search_query']}")
+                st.write("---")
+        else:
+            st.write("No actions logged yet.")
+
 if "selected_product" not in st.session_state:
     st.error("No product selected. Please go back and select a product.")
     st.stop()

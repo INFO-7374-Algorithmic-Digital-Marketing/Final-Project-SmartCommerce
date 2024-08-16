@@ -1,4 +1,5 @@
 import logging
+import pandas as pd
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -14,7 +15,8 @@ class OrderHistoryAgent:
         return order_history
 
     def get_similar_items(self, order_history, num_of_items=6):
-        print(self.data.columns)    
+        self.data['summary'] = self.data['summary'].fillna("No review summary available")
+        
         # Step 1: Get the list of unique categories from the user's order history
         user_categories = self.data[self.data['product_id'].isin(order_history)]['product_category_name_english'].unique().tolist()
 
@@ -44,15 +46,3 @@ class OrderHistoryAgent:
 
         logging.info(f"Top similar items based on categories in order history: {similar_items_details}")
         return similar_items_details
-
-# Columns Needed
-# customer_unique_id: Used to filter the order history for a specific user.
-# product_id: Used to list the products in the user's order history, filter similar items, and identify products for detailed information.
-# product_category_name_english: Used to find the categories of products in the user's order history and filter similar items.
-# avg_sentiment_score: Used to calculate the average sentiment score for similar items and to sort and select the top products.
-# title: Used as the name of the product in the detailed information for similar items.
-# shortDescription: Used as the description of the product in the detailed information for similar items.
-# imageUrl: Used to provide the image URL of the similar items.
-# itemWebUrl: Used to provide the web link to the similar items.
-# target_price: Used to include the average price of the similar items in the detailed information.
-# summary: Included in the product details for the similar items.

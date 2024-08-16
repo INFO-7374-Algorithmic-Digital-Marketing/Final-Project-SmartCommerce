@@ -209,7 +209,7 @@ API_URL = "http://localhost:8000"
 
 @st.cache_data
 def fetch_data(endpoint, user_id):
-    response = requests.get(f"{API_URL}/{endpoint}", json={"user_id": user_id})
+    response = requests.post(f"{API_URL}/{endpoint}", json={"user_id": user_id})
     return response.json()
 
 def top_selling_products():
