@@ -6,6 +6,7 @@ from recommendation_systems.collaborative_filter import CollaborativeFilteringAg
 from recommendation_systems.content_filter import OrderHistoryAgent
 from recommendation_systems.contextual_filter import ContextAwareAgent
 from recommendation_systems.market_basket_analysis import MarketBasketAgent
+from recommendation_systems.run_query import __run_query, get_snowflake_engine
 from search_engine.search_utils import get_search_results
 import pandas as pd
 import plotly.express as px
@@ -126,9 +127,8 @@ async def authenticate_user(user_input: UserInput):
 async def get_context_aware_recommendations(user_input: RecSysInput):
     logging.info(f"Generating context-aware recommendations for user_id: {user_input.user_id}")
     agent = ContextAwareAgent(orders_full)
-    recommendations = agent.generate_city_insights_and_recommendations(user_input.user_id)
-    logging.info(f"Recommendations generated: {recommendations['popular_items']}")
-    return recommendations["popular_items"]
+    popular_items = agent.generate_city_insights_and_recommendations(user_input.user_id)
+    return popular_items
 
 @app.post("/content_filter_recommendations")
 async def get_order_history_recommendations(user_input: RecSysInput):
@@ -142,8 +142,12 @@ async def get_order_history_recommendations(user_input: RecSysInput):
 @app.post("/collaborative_filtering_recommendations")
 async def get_collaborative_filtering_recommendations(user_input: RecSysInput):
     logging.info(f"Generating collaborative filtering recommendations for user_id: {user_input.user_id}")
+    sql_query = f'''select churn_flag from "Customers" where customer_unique_id = '{user_input.user_id}';'''
+    print("sql_query", sql_query)
+    churn_flag = __run_query(sql_query).iloc[0]
+    print("Churn Flag :", churn_flag)
     agent = CollaborativeFilteringAgent(orders_full)
-    recommendations = agent.get_items_bought_by_similar_users(user_input.user_id)
+    recommendations = agent.get_items_bought_by_similar_users(user_input.user_id, churn_flag)
     logging.info(f"Recommendations generated: {recommendations}")
     return recommendations
 
@@ -325,8 +329,8 @@ async def get_context_aware_recommendations_udf(request: Request):
     data = await request.json()
     user_id = data['data'][0][1]
     agent = ContextAwareAgent(orders_full)
-    recommendations = agent.generate_city_insights_and_recommendations(user_id)
-    return {"data": [[0, recommendations["popular_items"]]]}
+    popular_items = agent.generate_city_insights_and_recommendations(user_id)
+    return {"data": [[0, popular_items]]}
 
 @app.post("/content_filter_recommendations_udf")
 async def get_order_history_recommendations_udf(request: Request):

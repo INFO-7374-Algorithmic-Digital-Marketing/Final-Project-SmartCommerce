@@ -19,5 +19,5 @@ EXPOSE 8000 8501
 RUN pip install streamlit
 
 # Start both the FastAPI server and Streamlit app using a shell script
-# CMD ["bash", "-c", "cd fastapi && uvicorn main:app --host 0.0.0.0 --port 8000 --reload & cd /app/streamlit && streamlit run main.py --server.port 8501 --server.address 0.0.0.0"]
-CMD ["bash", "-c", "cd fastapi && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"]
+CMD ["bash", "-c", "cd fastapi && uvicorn main:app --host 0.0.0.0 --port 8000 --reload & cd /app/streamlit && streamlit run main.py --server.port 8501 --server.address 0.0.0.0"]
+# CMD ["bash", "-c", "cd fastapi && uvicorn main:app --host 0.0.0.0 --port 8000 --reload"]

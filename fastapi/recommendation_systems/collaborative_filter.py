@@ -1,5 +1,12 @@
 import logging
 import pandas as pd
+from abc import ABC, abstractmethod
+from openai import OpenAI
+from groq import Groq
+from dotenv import load_dotenv
+import pandas as pd
+
+load_dotenv()
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -13,7 +20,12 @@ class CollaborativeFilteringAgent:
         print("Creating persona")
         return self.data.groupby('customer_unique_id')['persona_column'].first().to_dict()
 
-    def get_items_bought_by_similar_users(self, user_id, num_of_items=6):
+    #Query to get the churn flag for a customer
+    def get_churn_flag(customer_id):
+        sql_query = f'''select churn_flag from "Customers" where customer_id = '{customer_id}';'''
+        return __run_query(sql_query)
+
+    def get_items_bought_by_similar_users(self, user_id, churn_flag, num_of_items=6):
         user_personas = self.user_personas.get(user_id, 'General Consumer').split(', ')
         
         similar_users = [
@@ -31,7 +43,9 @@ class CollaborativeFilteringAgent:
             'shortDescription': 'first',
             'imageUrl': 'first',
             'itemWebUrl': 'first',
-            'summary': 'first'  # Include 'summary' in the aggregation
+            'summary': 'first',  # Include 'summary' in the aggregation
+            'min_price':'first',
+            'max_price':'first'
         }).reset_index()
         
         top_items = items_bought_by_similar_users.sort_values(by='avg_sentiment_score', ascending=False).head(num_of_items)
@@ -46,7 +60,7 @@ class CollaborativeFilteringAgent:
                 "link": item['itemWebUrl'],
                 "category": item['product_category_name_english'],
                 "avg_sentiment_score": item['avg_sentiment_score'],
-                "avg_price": item['target_price'],
+                "avg_price": item['min_price'] if churn_flag.values[0] else item['max_price'],
                 "summary": item['summary']
             }
             recommended_items.append(product_details)
@@ -58,6 +72,7 @@ class CollaborativeFilteringAgent:
                          f"Avg. Price: ${item['avg_price']:.2f}")
         
         return recommended_items
+
 
 # Usage
 # cf_agent = CollaborativeFilteringAgent(orders_full_with_personas)

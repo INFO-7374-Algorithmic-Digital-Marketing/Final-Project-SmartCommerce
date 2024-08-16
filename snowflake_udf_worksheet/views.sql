@@ -10,8 +10,8 @@ WITH order_list_agg AS (
         product_id
     ORDER BY
         product_id
-), 
-
+),
+ 
 joined_with_category AS (
 SELECT 
     o.product_id, 
@@ -25,7 +25,7 @@ JOIN
 ON 
     o.product_id = p.product_id
 )
-
+ 
 SELECT 
     j.product_id, 
     j.min_price, 
@@ -37,8 +37,14 @@ JOIN
     "Product_Category_Translation" t
 ON 
     t.product_category_name = j.product_category_name;
-
-
+ 
+ 
+SELECT 
+    *
+FROM 
+    product_price_summary_view;
+ 
+ 
 CREATE VIEW top_products_with_price_summary AS 
 WITH temp AS (
     SELECT 
@@ -63,7 +69,7 @@ counted_products_review AS (
     LIMIT 
         1000
 )
-
+ 
 SELECT 
     c.product_id, 
     c.cnt, 
@@ -76,3 +82,16 @@ JOIN
     product_price_summary_view p
 ON 
     c.product_id = p.product_id;
+ 
+ 
+select 
+    * 
+from 
+    top_products_with_price_summary
+where 
+    product_id in ( 
+    select 
+        product_id 
+    from
+        top_products_with_price_summary
+    );

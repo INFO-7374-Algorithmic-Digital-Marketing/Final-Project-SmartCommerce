@@ -55,7 +55,7 @@ def get_search_results(query: str, orders_full: pd.DataFrame, threshold: int = 7
     logging.info("Converting top results to the desired format")
     print(top_results[["title"]])
     
-    for i in range(10):
+    for i in range(len(top_results)):
         item = top_results.iloc[i]
         search_results.append({
             "product_id": item['product_id'],

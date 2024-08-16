@@ -9,8 +9,13 @@ load_dotenv()
 API_URL = "http://localhost:8000"  # Update this with your FastAPI server URL
 
 id_mapping = {
-    "cst_demo": "548a09978548d2e347d494793e34c797",
-    "seller_demo": "7d13fca15225358621be4086e1eb0964"
+    "demo_user_1": "548a09978548d2e347d494793e34c797",
+    "demo_user_2": "c402f431464c72e27330a67f7b94d4fb",
+    "demo_user_3": "1d2435aa3b858d45c707c9fc25e18779",
+    "demo_user_4": "24f12460aad399ba18f4ed2c2fbab65d",
+    "seller_demo_1": "7d13fca15225358621be4086e1eb0964",
+    "seller_demo_2": "cc419e0650a3c5ba77189a1882b7556a",
+    "seller_demo_3": "4a3ca9315b744ce9f8e9374361493884"
 }
 
 # Add your logo
@@ -64,6 +69,10 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
+# Initialize log if it doesn't exist
+if "user_log" not in st.session_state:
+    st.session_state.user_log = []
 
 # Main content
 st.markdown("<h1 style='text-align: center; color: #003563;'>Welcome to SmartCommerce!</h1>", unsafe_allow_html=True)
