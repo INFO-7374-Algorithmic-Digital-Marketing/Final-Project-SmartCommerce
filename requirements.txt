@@ -11,3 +11,6 @@ llama-index-core
 llama-index-llms-openai
 mlxtend
 plotly
+fuzzywuzzy
+sentence-transformers
+groq

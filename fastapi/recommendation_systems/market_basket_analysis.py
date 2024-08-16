@@ -6,7 +6,6 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 def apriori_recommendation_system(min_support=0.0001):
     # Load data
-    # import pdb; pdb.set_trace()
     logging.info("Loading order items dataset...")
     data = pd.read_csv(file_paths["order_items"])
     data = data.head(40000)
@@ -91,3 +90,7 @@ class MarketBasketAgent:
 
 
 
+# Columns needed
+# order_id: Used to group the products into baskets (transactions) for the Apriori algorithm.
+# product_id: Used to filter products that meet the frequency threshold, group products in the basket, and generate association rules.
+# quantity: Created within the code to represent the presence of a product in an order (set to 1 for all products) and used for grouping in the basket.
