@@ -9,11 +9,11 @@ id_mapping = {
     "seller_demo": "7d13fca15225358621be4086e1eb0964"
 }
 
-# Add your logo
-logo = Image.open("/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/streamlit/pages/assets/logo.jpeg")
+# # Add your logo
+# logo = Image.open("/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/streamlit/pages/assets/logo.jpeg")
 
-# Create a sidebar
-st.sidebar.image(logo, width=200)
+# # Create a sidebar
+# st.sidebar.image(logo, width=200)
 st.sidebar.markdown("The Future of Shopping... has just Arrived. Welcome to SmartCommerce! ")
 import base64
 def set_bg_hack(main_bg):

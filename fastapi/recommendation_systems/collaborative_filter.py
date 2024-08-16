@@ -1,5 +1,6 @@
 import logging
 import pandas as pd
+import database
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -13,6 +14,8 @@ class CollaborativeFilteringAgent:
         return self.data.groupby('customer_unique_id')['persona_column'].first().to_dict()
 
     def get_items_bought_by_similar_users(self, user_id, num_of_items=6):
+        # import some churn detect fn 
+        # get user id's churn flag
         user_personas = self.user_personas.get(user_id, 'General Consumer').split(', ')
         
         similar_users = [
@@ -56,7 +59,9 @@ class CollaborativeFilteringAgent:
                          f"Category: {item['category']}, Avg. Sentiment: {item['avg_sentiment_score']:.2f}, "
                          f"Avg. Price: ${item['avg_price']:.2f}")
         
-        return recommended_items
+        return 
+    
+
 
 # Usage
 # cf_agent = CollaborativeFilteringAgent(orders_full_with_personas)

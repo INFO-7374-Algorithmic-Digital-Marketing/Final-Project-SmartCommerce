@@ -31,6 +31,9 @@ current_dir = os.getcwd()
 RAW_DATA_FOLDER_PATH = "/home/snehilaryan/final_pro/Final-Project-SmartCommerce/data_pipeline/data_files/raw/"
 PROCESSED_DATA_FOLDER_PATH = "/home/snehilaryan/final_pro/Final-Project-SmartCommerce/data_pipeline/data_files/processed/"
 
+# RAW_DATA_FOLDER_PATH = os.getenv("RAW_DATA_FOLDER_PATH")
+# PROCESSED_DATA_FOLDER_PATH = os.getenv("PROCESSED_DATA_FOLDER_PATH")
+
 # Load the preprocessed data
 logging.info("Loading preprocessed data from CSV files")
 try:
