@@ -7,6 +7,16 @@ from recommendation_systems.contextual_filter import ContextAwareAgent
 from recommendation_systems.market_basket_analysis import MarketBasketAgent
 from search_engine.search_utils import get_search_results
 import pandas as pd
+import plotly.express as px
+import numpy as np
+import os
+from abc import ABC, abstractmethod
+from openai import OpenAI
+from groq import Groq
+from dotenv import load_dotenv
+import streamlit as st
+import pandas as pd
+import plotly.express as px
 
 # Configure logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -35,6 +45,57 @@ class RecSysInput(BaseModel):
 class SearchRequest(BaseModel):
     query: str
     user_id: str
+
+class LLMCaller(ABC):
+    def __init__(self, system_prompt):
+        self.system_prompt = system_prompt
+
+    @abstractmethod
+    def call_llm(self, user_prompt):
+        pass
+
+class OpenAICaller(LLMCaller):
+    def __init__(self, system_prompt):
+        super().__init__(system_prompt)
+        self.client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+
+    def call_llm(self, user_prompt):
+        messages = [
+            {"role": "system", "content": self.system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        response = self.client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=messages,
+            stream=True
+        )
+        return ''.join(chunk.choices[0].delta.content or "" for chunk in response)
+
+class GroqCaller(LLMCaller):
+    def __init__(self, system_prompt):
+        super().__init__(system_prompt)
+        self.client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+
+    def call_llm(self, user_prompt):
+        messages = [
+            {"role": "system", "content": self.system_prompt},
+            {"role": "user", "content": user_prompt}
+        ]
+        response = self.client.chat.completions.create(
+            messages=messages,
+            model="llama3-8b-8192"
+        )
+        return response.choices[0].message.content.strip()
+
+
+
+
+def get_ai_insight(topic, data, insight_type="brief"):
+    system_prompt = f"You are an AI assistant providing {'brief' if insight_type == 'brief' else 'detailed'} insights for an e-commerce seller dashboard."
+    user_prompt = f"Based on the following data about {topic}, provide a {'brief ( 4-5 lines )' if insight_type == 'brief' else 'detailed and comprehensive ( 10 - 15lines)'} recommendation for the seller:\n\n{data}"
+    
+    llm_caller = OpenAICaller(system_prompt)  # or GroqCaller(system_prompt)
+    return llm_caller.call_llm(user_prompt)
 
 
 @app.post("/product_search")
@@ -96,3 +157,121 @@ async def get_market_basket_recommendations(user_input: RecSysInput):
     recommendations = agent.recommend(user_order_history)
     logging.info(f"Recommendations generated: {recommendations}")
     return recommendations
+
+@app.get("/top_selling_products")
+async def top_selling_products():
+    df = orders_full
+    logging.info("Generating insights on top-selling products")
+    product_sales = df.groupby('title')['target_price'].sum().sort_values(ascending=False).head(10)
+    logging.info(f"Top-selling products: {product_sales}")
+    top_product = product_sales.index[0]
+    top_product_summary = df[df['title'] == top_product]['summary'].iloc[0]
+    logging.info(f"Summary of top product: {top_product_summary}")
+
+    # Generate AI insights
+    brief_insight = get_ai_insight("Top Selling Products", product_sales.to_dict(), insight_type="brief")
+    detailed_insight = get_ai_insight("Top Selling Products", product_sales.to_dict(), insight_type="detailed")
+
+    result = {
+        "product_sales": product_sales.to_dict(),
+        "top_product": top_product,
+        "top_product_summary": top_product_summary,
+        "brief_ai_insight": brief_insight,
+        "detailed_insights": detailed_insight
+    }
+    logging.info(f"Insights generated: {result}")
+    return result
+
+@app.get("/worst_performing_products")
+async def worst_performing_products():
+    df = orders_full
+    logging.info("Generating insights on worst-performing products")
+    product_sales = df.groupby('title')['target_price'].sum().sort_values().head(10)
+    logging.info(f"Worst-performing products: {product_sales}")
+    worst_product = product_sales.index[0]
+    worst_product_summary = df[df['title'] == worst_product]['summary'].iloc[0]
+    logging.info(f"Summary of worst product: {worst_product_summary}")
+
+    # Generate AI insights
+    brief_insight = get_ai_insight("Worst Performing Products", product_sales.to_dict(), insight_type="brief")
+    detailed_insight = get_ai_insight("Worst Performing Products", product_sales.to_dict(), insight_type="detailed")
+
+    result = {
+        "product_sales": product_sales.to_dict(),
+        "worst_product": worst_product,
+        "worst_product_summary": worst_product_summary,
+        "brief_ai_insight": brief_insight,
+        "detailed_insights": detailed_insight
+    }
+    logging.info(f"Insights generated: {result}")
+    return result
+
+@app.get("/competitor_analysis")
+async def competitor_analysis():
+    df = orders_full
+    logging.info("Generating insights on competitors")
+    seller_sales = df.groupby('seller_id')['target_price'].sum().sort_values(ascending=False).head(5)
+    logging.info(f"Top competitors: {seller_sales}")
+    top_seller = seller_sales.index[0]
+    top_seller_products = df[df['seller_id'] == top_seller]['title'].value_counts().head()
+
+    # Generate AI insights
+    brief_insight = get_ai_insight("Competitor Analysis", seller_sales.to_dict(), insight_type="brief")
+    detailed_insight = get_ai_insight("Competitor Analysis", seller_sales.to_dict(), insight_type="detailed")
+
+    result = {
+        "seller_sales": seller_sales.to_dict(),
+        "top_seller": top_seller,
+        "top_seller_products": top_seller_products.to_dict(),
+        "brief_ai_insight": brief_insight,
+        "detailed_insights": detailed_insight
+    }
+    logging.info(f"Insights generated: {result}")
+    return result
+
+@app.get("/customer_targeting")
+async def customer_targeting():
+    df = orders_full
+    logging.info("Generating insights on customer targeting")
+    persona_counts = df['persona_column'].value_counts()
+    state_sales = df.groupby('customer_state')['target_price'].sum().sort_values(ascending=False).head(5)
+
+    # Generate AI insights
+    brief_insight = get_ai_insight("Customer Targeting", persona_counts.to_dict(), insight_type="brief")
+    detailed_insight = get_ai_insight("Customer Targeting", persona_counts.to_dict(), insight_type="detailed")
+
+    result = {
+        "persona_counts": persona_counts.to_dict(),
+        "top_persona": persona_counts.index[0],
+        "state_sales": state_sales.to_dict(),
+        "brief_ai_insight": brief_insight,
+        "detailed_insights": detailed_insight
+    }
+    logging.info(f"Insights generated: {result}")
+    return result
+
+@app.get("/supply_chain_optimization")
+async def supply_chain_optimization():
+    df = orders_full
+    logging.info("Generating insights on supply chain optimization")
+    customer_locations = df['customer_zip_code_prefix'].value_counts().head(10)
+    seller_locations = df['seller_zip_code_prefix'].value_counts().head(10)
+
+    # Convert numpy types to Python native types
+    customer_locations_dict = {str(key): int(value) for key, value in customer_locations.items()}
+    seller_locations_dict = {str(key): int(value) for key, value in seller_locations.items()}
+
+    # Generate AI insights
+    brief_insight = get_ai_insight("Supply Chain Optimization", customer_locations_dict, insight_type="brief")
+    detailed_insight = get_ai_insight("Supply Chain Optimization", customer_locations_dict, insight_type="detailed")
+
+    result = {
+        "customer_locations": customer_locations_dict,
+        "seller_locations": seller_locations_dict,
+        "top_customer_zip": str(customer_locations.index[0]),
+        "top_seller_zip": str(seller_locations.index[0]),
+        "brief_ai_insight": brief_insight,
+        "detailed_insights": detailed_insight
+    }
+    logging.info(f"Insights generated: {result}")
+    return result

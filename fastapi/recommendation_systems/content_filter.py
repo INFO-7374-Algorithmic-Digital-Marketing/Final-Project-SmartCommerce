@@ -13,7 +13,7 @@ class OrderHistoryAgent:
         logging.info(f"Order history for user_id {user_id}: {order_history}")
         return order_history
 
-    def get_similar_items(self, order_history):
+    def get_similar_items(self, order_history, num_of_items=6):
         print(self.data.columns)    
         # Step 1: Get the list of unique categories from the user's order history
         user_categories = self.data[self.data['product_id'].isin(order_history)]['product_category_name_english'].unique().tolist()
@@ -25,7 +25,7 @@ class OrderHistoryAgent:
         similar_items = similar_items.groupby('product_id')['avg_sentiment_score'].mean().reset_index()
 
         # Step 4: Sort by sentiment score and select the top 10 products
-        top_similar_items = similar_items.sort_values(by='avg_sentiment_score', ascending=False).head(10)['product_id'].tolist()
+        top_similar_items = similar_items.sort_values(by='avg_sentiment_score', ascending=False).head(num_of_items)['product_id'].tolist()
 
         # Step 5: Get detailed information for each of the top similar products
         similar_items_details = []

@@ -51,8 +51,8 @@ else:
         st.warning("No results found for your search query.")
 
     if st.button("Back to Main Page"):
-        del st.session_state['search_query']
-        st.switch_page("Main_Page.py")
+        st.session_state.selected_product = None  # Clear the selected product
+        st.switch_page("pages/2_Customer_Recommendations.py")
 
 # Add custom CSS styling
 st.markdown(

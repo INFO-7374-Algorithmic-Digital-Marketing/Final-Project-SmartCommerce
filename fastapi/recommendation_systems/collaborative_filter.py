@@ -12,7 +12,7 @@ class CollaborativeFilteringAgent:
     def _create_user_persona_dict(self):
         return self.data.groupby('customer_unique_id')['persona_column'].first().to_dict()
 
-    def get_items_bought_by_similar_users(self, user_id):
+    def get_items_bought_by_similar_users(self, user_id, num_of_items=6):
         user_personas = self.user_personas.get(user_id, 'General Consumer').split(', ')
         
         similar_users = [
@@ -33,7 +33,7 @@ class CollaborativeFilteringAgent:
             'summary': 'first'  # Include 'summary' in the aggregation
         }).reset_index()
         
-        top_items = items_bought_by_similar_users.sort_values(by='avg_sentiment_score', ascending=False).head(10)
+        top_items = items_bought_by_similar_users.sort_values(by='avg_sentiment_score', ascending=False).head(num_of_items)
         
         recommended_items = []
         for _, item in top_items.iterrows():

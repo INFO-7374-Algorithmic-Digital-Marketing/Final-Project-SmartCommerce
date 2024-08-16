@@ -13,3 +13,4 @@ mlxtend
 plotly
 fuzzywuzzy
 sentence-transformers
+groq

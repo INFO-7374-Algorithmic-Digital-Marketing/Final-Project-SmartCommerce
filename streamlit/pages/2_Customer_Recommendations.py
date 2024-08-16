@@ -26,9 +26,9 @@ if "user_id" not in st.session_state or not st.session_state.user_id:
 # Create a logout button at the top right
 col1, col2 = st.columns([8, 1])
 with col2:
-    if st.button("Logout"):
-        for key in st.session_state.keys():
-            del st.session_state[key]
+    logout_clicked = st.button("Logouts")
+    if logout_clicked:
+        st.session_state.clear()  # Clear all session state variables
         st.rerun()  # Refresh the page to apply changes
 
 # Add a custom title with a different style
@@ -55,6 +55,12 @@ with st.spinner("Generating recommendations..."):
 st.markdown("### 🌟 Handpicked Recommendations for You!")
 st.markdown("<hr style='border:1px solid #007a99;'>", unsafe_allow_html=True)
 
+def truncate_product_name(name, max_length=45):
+    if len(name) > max_length:
+        return name[:max_length] + "..."
+    else:
+        return name
+
 def display_product_strip(products, section_title):
     st.markdown(f"#### {section_title}")
     cols = st.columns(len(products))
@@ -63,7 +69,7 @@ def display_product_strip(products, section_title):
             img = fetch_image(product['image_url'])
             resized_img = resize_image(img, (150, 150))
             st.image(resized_img, use_column_width=True)
-            st.markdown(f"<p style='font-weight:bold; text-align:center;'>{product['name']}</p>", unsafe_allow_html=True)
+            st.markdown(f"<p style='font-weight:bold; text-align:center;'>{truncate_product_name(product['name'])}</p>", unsafe_allow_html=True)
             if st.button("View Details", key=product, help="Click to view more details."):
                 st.session_state.selected_product = product
                 st.switch_page("pages/3_Product_Details.py")

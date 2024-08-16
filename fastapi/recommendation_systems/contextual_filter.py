@@ -103,9 +103,9 @@ class ContextAwareAgent:
         logging.info(f"Generated insights and recommendations for user_id {user_id}: {insights}")
         return insights
 
-    def get_popular_items_by_location(self, location):
+    def get_popular_items_by_location(self, location, num_of_items=6):
         # Get the top 10 product IDs based on popularity in the given location
-        popular_item_ids = self.data[self.data['customer_city'] == location]['product_id'].value_counts().head(10).index.tolist()
+        popular_item_ids = self.data[self.data['customer_city'] == location]['product_id'].value_counts().head(num_of_items).index.tolist()
 
         # Initialize an empty list to store detailed product information
         popular_items_details = []

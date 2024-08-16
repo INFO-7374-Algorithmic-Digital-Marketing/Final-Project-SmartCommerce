@@ -10,7 +10,7 @@ id_mapping = {
 }
 
 # Add your logo
-logo = Image.open("/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/streamlit/pages/logo.jpeg")
+logo = Image.open("/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/streamlit/pages/assets/logo.jpeg")
 
 # Create a sidebar
 st.sidebar.image(logo, width=200)
@@ -39,7 +39,7 @@ def set_bg_hack(main_bg):
          unsafe_allow_html=True
      )
 
-set_bg_hack('/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/streamlit/pages/background.jpg')
+# set_bg_hack('/Users/deveshsurve/UNIVERSITY/INFO/7374/Final-Project-SmartCommerce/streamlit/pages/background.jpg')
 # # Custom CSS
 st.markdown(
     """
@@ -76,6 +76,7 @@ if st.button("Login"):
         st.session_state.user_id = mapped_user_id
         st.success("Login successful!")
         st.rerun()
+        
     else:
         st.error("Invalid credentials. Please try again.")
 
@@ -84,4 +85,4 @@ if 'user_type' not in st.session_state:
 elif st.session_state.user_type == "customer":
         st.switch_page("pages/2_Customer_Recommendations.py")
 elif st.session_state.user_type == "seller":
-        st.switch_page("pages/5_Seller_Dashboard.py")
+        st.switch_page("pages/6_Seller_Dashboard.py")
